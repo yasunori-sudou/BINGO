@@ -6,7 +6,7 @@ const prizeList = [
   { rank: 4,  name: '舟',      type: 'gold' },
   { rank: 5,  name: '馬',       type: 'gold' },
   { rank: 6,  name: 'アマギフ',type: 'gold' },
-  { rank: 7,  name: 'ああああああああああ',          type: 'gold' },
+  { rank: 7,  name: 'ゴミ',          type: 'gold' },
   { rank: 8,  name: '高級お菓子',        type: 'gold' },
   { rank: 9,  name: 'カタログギフト',    type: 'gold' },
   { rank: 10, name: 'ブランドタオル',   type: 'gold' },
@@ -46,6 +46,45 @@ function loadCookie(){
 function redrawHistory(){
   $('#history').empty();
   drawnNumbers.forEach(n => addBall(n));
+}
+/**
+ * データを保存する
+ * @returns void
+ */
+function saveData(){
+  const data = JSON.stringify(drawnNumbers);
+
+  if(location.protocol === 'file:'){
+    // file:// 用
+    localStorage.setItem('bingo', data);
+  }else{
+    // http(s):// 用
+    document.cookie =
+      "bingo=" + encodeURIComponent(data) +
+      "; max-age=31536000; path=/";
+  }
+}
+
+/**
+ * データを読み込む
+ * @returns void
+ */
+function loadData(){
+  let data = null;
+
+  if(location.protocol === 'file:'){
+    data = localStorage.getItem('bingo');
+  }else{
+    const match = document.cookie.match(/bingo=([^;]+)/);
+    if(match){
+      data = decodeURIComponent(match[1]);
+    }
+  }
+
+  if(data){
+    drawnNumbers = JSON.parse(data);
+    redrawHistory();
+  }
 }
 
 /**
@@ -98,7 +137,6 @@ function lotteryStart(){
     addBall(final);
     saveData();
 
-
     // 確定後0.5秒はボタン無効
     setTimeout(() => {
       isDrawing = false;
@@ -131,45 +169,6 @@ $('#resetBtn').on('click', function(){
   $('#mainNumber').text('-');
 });
 
-/**
- * データを保存する
- * @returns void
- */
-function saveData(){
-  const data = JSON.stringify(drawnNumbers);
-
-  if(location.protocol === 'file:'){
-    // file:// 用
-    localStorage.setItem('bingo', data);
-  }else{
-    // http(s):// 用
-    document.cookie =
-      "bingo=" + encodeURIComponent(data) +
-      "; max-age=31536000; path=/";
-  }
-}
-
-/**
- * データを読み込む
- * @returns void
- */
-function loadData(){
-  let data = null;
-
-  if(location.protocol === 'file:'){
-    data = localStorage.getItem('bingo');
-  }else{
-    const match = document.cookie.match(/bingo=([^;]+)/);
-    if(match){
-      data = decodeURIComponent(match[1]);
-    }
-  }
-
-  if(data){
-    drawnNumbers = JSON.parse(data);
-    redrawHistory();
-  }
-}
 
 /**
  * 景品リストを表示する
