@@ -29,7 +29,6 @@
 - 同ディレクトリの bingo.html をブラウザで直接開く
 file:///（ダウンロードしたパス）/bingo.html
 - Web サーバー経由でアクセス
-http://localhost/nfsys/bingo/bingo.html
 
 ## 抽選
 - 「抽選」ボタンを押すと番号がランダムに選ばれます。
