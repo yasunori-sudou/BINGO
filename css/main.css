@@ -1,0 +1,310 @@
+body{
+    background: linear-gradient(135deg, #060e4f, #c33764);
+    color:#fff;
+    min-height:100vh;
+    caret-color: transparent;
+}
+/* title */
+.bingo-title{
+    font-size:40px;
+    text-shadow:0 5px 15px rgba(0,0,0,0.4);
+}
+
+.bingo-area{
+  position: relative;
+  border-radius: 32px;
+  padding: 8px 6px 18px;
+  background: rgba(0,0,0,0.15); /* 中はうっすら暗く */
+
+  /* 金色フレーム */
+  border: 4px solid transparent;
+  background-clip: padding-box;
+}
+
+.bingo-area::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: 32px;
+  padding:4px; /* 枠の太さ */
+  background: linear-gradient(
+    135deg,
+    #fffde7,
+    #ffd700,
+    #ffb700,
+    #ffd700,
+    #fffde7
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events:none;
+}
+
+/* ほんのり金色オーラ */
+.bingo-area::before{
+  content:"";
+  position:absolute;
+  inset:-14px;
+  border-radius: 40px;
+  background: radial-gradient(circle, rgba(255,215,0,0.25), transparent 70%);
+  z-index:-1;
+}
+
+/* 抽選される番号 */
+.main-number{
+  font-size: 240px;
+  font-weight:900;
+  line-height:1;
+  margin: 0px 0 20px;
+  letter-spacing:-4px;
+
+  /* 明るいゴールド（白寄り） */
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #fff9c4 25%,
+    #ffeb3b 50%,
+    #ffd700 75%,
+    #fffde7 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+    /* くっきり輪郭＋強め発光 */
+    text-shadow: 0 0 0px #ffffff, 0 0 2px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 215, 0, 0.95), 0 0 6px rgba(255, 215, 0, 0.9);
+}
+
+.draw-btn{
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:0.2em;
+  padding: 7px 50px;
+  border-radius:999px;
+
+  color:#4b3200;
+  background: linear-gradient(
+    180deg,
+    #fffde7 0%,
+    #ffeb3b 40%,
+    #ffd700 60%,
+    #ffb700 100%
+  );
+  border: 2px solid #fff3a0;
+
+  box-shadow:
+    0 6px 0 #b8860b,
+    0 12px 20px rgba(0,0,0,0.35),
+    0 0 25px rgba(255,215,0,0.6);
+
+  transition: all 0.15s ease;
+}
+
+/* ホバー */
+.draw-btn:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 0 #b8860b,
+    0 16px 28px rgba(0,0,0,0.4),
+    0 0 35px rgba(255,215,0,0.8);
+}
+
+/* 押下 */
+.draw-btn:active{
+  transform: translateY(3px);
+  box-shadow:
+    0 2px 0 #b8860b,
+    0 6px 12px rgba(0,0,0,0.35);
+}
+
+/* 無効時 */
+.draw-btn:disabled{
+  opacity:0.6;
+  transform:none;
+  box-shadow:
+    0 2px 0 #7a5a00,
+    0 4px 10px rgba(0,0,0,0.3);
+  cursor:not-allowed;
+}
+
+/* 仕切り線 */
+.divider{
+    border-top:2px solid rgba(255,255,255,0.6);
+    margin: 15px 0;
+}
+/* 過去の番号 */
+.history{
+    display:grid;
+    grid-template-columns: repeat(15, 64px);
+    gap:8px;
+    justify-content:center;
+}
+
+/* 縮小画面対応 */
+@media (max-width: 620px){
+    .history{
+        grid-template-columns: repeat(10, 64px);
+    }
+}
+
+.ball{
+    width: 68px;
+    height: 68px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 45px;
+    font-weight:bold;
+
+    color:#fff;
+    text-shadow:
+        -2px -2px 0 #000,
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         0 0 10px rgba(0,0,0,0.7);
+    box-shadow:0 8px 25px rgba(0,0,0,0.5);
+}
+
+/* ===== 10単位カラー ===== */
+.ball.group-0{ background: linear-gradient(145deg, #e21a1a, #740101); }
+.ball.group-1{ background: linear-gradient(145deg, #274dc2, #001d75); }
+.ball.group-2{ background: linear-gradient(145deg, #35c759, #0f7a2d); }
+.ball.group-3{ background: linear-gradient(145deg, #ffd93b, #c9a300); }
+.ball.group-4{ background: linear-gradient(145deg, #544a4a, #5e5353); }
+.ball.group-5{ background: linear-gradient(145deg, #ff9f1c, #c2410c); }
+.ball.group-6{ background: linear-gradient(145deg, #22d3ee, #0e7490); }
+.ball.group-7{ background: linear-gradient(145deg, #fb7185, #9f1239); }
+
+/* 景品画像を枠いっぱいに */
+.prize-area{
+    height:100%;
+}
+
+/* 景品リスト */
+.prize-list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 景品1件 */
+.prize-item{
+  font-size: 28px;
+  position: relative;
+  padding: 0px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  transition: all .3s ease;
+}
+
+/* 1～10位（豪華） */
+.prize-item.gold{
+  background: linear-gradient(145deg, #ffd700, #b8860b);
+  color: #000;
+  text-shadow: 0 1px 1px #fff;
+}
+
+/* 11～15位（実用品） */
+.prize-item.normal{
+  background: linear-gradient(145deg, #4fc3f7, #0288d1);
+}
+
+/* ランク表示 */
+.prize-item .rank{
+  margin-right: 6px;
+}
+
+/* ×印 */
+.prize-item .done{
+  position: absolute;
+  right: 12px;
+  top: 6px;
+  font-size: 26px;
+  display: none;
+}
+
+/* 当選済み */
+.prize-item.claimed{
+  opacity: 0.45;
+  filter: grayscale(100%);
+  text-decoration: line-through;
+}
+
+.prize-item.claimed .done{
+  display: block;
+}
+/* ===== 予告（次これ来る） ===== */
+.prize-item.preview{
+  animation: sparkleGlow 0.6s infinite alternate;
+  box-shadow:
+    0 0 15px rgba(255,215,0,0.9),
+    0 0 30px rgba(255,215,0,0.7);
+}
+
+@keyframes sparkleGlow{
+  from{
+    transform: scale(1);
+    filter: brightness(1.1);
+  }
+  to{
+    transform: scale(1.03);
+    filter: brightness(1.4);
+  }
+}
+
+/* 履歴スクロール領域 */
+.history-wrapper{
+  max-height: 450px;
+  overflow-y: auto;
+
+  box-sizing: border-box; 
+  padding-right: 26px;
+}
+
+/* ===== スクロールバー全体 ===== */
+.history-wrapper::-webkit-scrollbar{
+  width: 18px;
+}
+
+/* ===== つまみ ===== */
+.history-wrapper::-webkit-scrollbar-thumb{
+  border-radius: 30px;
+  background: linear-gradient(
+    180deg,
+    #fffde7,
+    #ffd700,
+    #ffb700
+  );
+  border: 4px solid rgba(0,0,0,0.25);
+  box-shadow:
+    inset 0 0 6px rgba(255,255,255,0.9),
+    0 0 10px rgba(255,215,0,0.8);
+}
+
+/* hover */
+.history-wrapper::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #ffeb3b,
+    #ffd700
+  );
+}
+
+/* ===== レール（背景） ===== */
+.history-wrapper::-webkit-scrollbar-track{
+  border-radius: 30px;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.6),
+    rgba(255,255,255,0.08)
+  );
+}
+
