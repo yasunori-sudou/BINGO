@@ -22,10 +22,16 @@ const MAX_NUMBER = 75; // ビンゴ最大値
 let drawnNumbers = [];
 let isDrawing = false;
 
+/**
+ * クッキーに保存する
+ */
 function saveCookie(){
   document.cookie = "bingo=" + JSON.stringify(drawnNumbers) + "; max-age=31536000; path=/";
 }
 
+/**
+ * クッキーから読み込む
+ */
 function loadCookie(){
   const match = document.cookie.match(/bingo=([^;]+)/);
   if(match){
@@ -34,11 +40,18 @@ function loadCookie(){
   }
 }
 
+/**
+ * 履歴を再描画する
+ */
 function redrawHistory(){
   $('#history').empty();
   drawnNumbers.forEach(n => addBall(n));
 }
 
+/**
+ * 履歴にボールを追加する
+ * @param {int} num 
+ */
 function addBall(num){
   const group = Math.floor(num / 10); // 10単位
 
@@ -51,7 +64,7 @@ function addBall(num){
 }
 
 $('#drawBtn').on('click', function(){
-  lotteryStart();
+  lotteryStart();// 抽選を実行する
 });
 
 /**
