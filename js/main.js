@@ -102,6 +102,14 @@ function addBall(num){
   $('#history').append($ball);
 }
 
+// Enterキーで抽選を実行
+$(document).on('keydown', function(e){
+  if(e.key === 'Enter'){ 
+    lotteryStart();        // 抽選を実行
+  }
+});
+
+// 抽選ボタンを押すと抽選を実行
 $('#drawBtn').on('click', function(){
   lotteryStart();// 抽選を実行する
 });
@@ -153,12 +161,30 @@ function lotteryStart(){
  */
 function playConfirmSound(){
   if(!$('#soundcheck').prop('checked')) return; // 音OFFなら無効
+
   const se = document.getElementById('seConfirm');
   if(!se) return;
-  se.currentTime = 0; // 連続再生対策
+
   const linkFileName = $("#sound-select").val();
-  se.src = `./sound/${linkFileName}.mp3`;
-  se.play();
+  const src = `./sound/${linkFileName}.mp3`;
+
+  // 連続再生対策
+  se.currentTime = 0;
+
+  // エラー時の処理（ファイルが存在しない場合）
+  se.onerror = function() {
+    $("#form-check-label").text('効果音ファイルが見つかりません！');
+    return; // 処理中断
+  };
+
+  // 読み込み成功時のみ再生
+  se.oncanplaythrough = function() {
+    $("#form-check-label").text('効果音チェック');
+    se.play();
+  };
+
+  // src を設定して読み込み開始
+  se.src = src;
 }
 
 $('#resetBtn').on('click', function(){
